@@ -1,0 +1,9 @@
+{
+	"name": "inneractive",
+	"version": "1",
+	"description": "Hello world for inneractive",
+	"launch_path": "/index.html",
+	"icons": {
+		"128": ""
+	}
+}

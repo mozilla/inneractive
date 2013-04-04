@@ -1,19 +1,6 @@
 <h1>Hello World</h1>
 
-<script> 
-var APP_ID = "Mozilla_TestApp"; 
-var PORTAL = 642; 
-var CATEGORY = "Music"; 
-var KEYWORDS = "Rock,Pop,Jazz,Blues"; 
-var GPS_COORDINATES = ""; 
-var LOCATION = ""; 
-var IMPRESSION_PIXEL = ""; 
-var CLICK_PIXEL = ""; 
-var FAILOVER = "alert(\"No ad\");"; 
-var IS_MOBILE_WEB = false; 
-var IS_ORMMA_SUPPORT = true; 
-var IS_MRAID_SUPPORT = true; 
-var IS_INTERSTITIAL_AD = false; 
- 
-document.write("<script language='javascript' src='http://ad-tag.inner-active.mobi/simpleM2M/RequestTagAd?v=" + ((IS_ORMMA_SUPPORT) ? ((IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=116" : "Stag-2.1.0&f=52") : ((IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=84" : "Stag-2.0.1&f=20")) + ((IS_INTERSTITIAL_AD) ? "&fs=true" : "&fs=false") + "&aid=" + encodeURIComponent(APP_ID) + "&po=" + PORTAL + "&c=" + encodeURIComponent(CATEGORY) + "&k=" + encodeURIComponent(KEYWORDS) + ((FAILOVER) ? "&noadstring=" + encodeURIComponent(FAILOVER) : "&test=true") + "&lg=" + encodeURIComponent(GPS_COORDINATES) + "&l=" + encodeURIComponent(LOCATION) + "&mw=" + ((IS_MOBILE_WEB) ? "true" : "false") + "'><\/script>"); 
-</script>
+<div id="inneractiveBanner"> </div>
+
+<script src="innerActive.js"></script>
+<script src="script.js"></script>
