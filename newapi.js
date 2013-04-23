@@ -1,3 +1,8 @@
+/**
+* This source file is returned from the API request. Make it local seeing
+* as we can't execute remotely loaded code.
+*/
+
 function getValueById(elementId){
 	if(document.getElementById(elementId)){
 		return document.getElementById(elementId).value;
@@ -34,6 +39,7 @@ function addTrackingPixel(trackingPixelSrc, shouldSendArguments, argumentsObj) {
 
 function redirect(hrefObj, argumentsObj) {
 	var timeout = setTimeout(function() {
+		//NOTE: this used to be generated
 		if (IS_MRAID_SUPPORT) {
 			mraid.open(hrefObj.href);
 		} else {
@@ -80,7 +86,11 @@ function attachHrefHandler(hrefObj) {
 	}
 }
 
+/**
+* Execute JavaScript once the ad is loaded.
+*/
 function onResponse () {
+	//don't do anything if no ORMA support.
 	if (!IS_ORMMA_SUPPORT) return;
 
 	var linksArray = document.getElementsByTagName('a');

@@ -1,7 +1,7 @@
 var APP_ID = "Mozilla_AppTest_other";
 var PORTAL = 642;
 var IS_MOBILE_WEB = false;
-var IS_ORMMA_SUPPORT = true;
+var IS_ORMMA_SUPPORT = false;
 var IS_MRAID_SUPPORT = true;
 var IS_INTERSTITIAL_AD = false;
  
@@ -78,13 +78,18 @@ var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
 	//complete
 	if (xhr.readyState === 4) {
-		//remove any scripts
+		//NOTE: remove all <script> tags!
 		var strippedHTML = xhr.responseText.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
 
+		//this should just be pure HTML containing the ad
 		document.getElementById(TEMPLATE).innerHTML = strippedHTML;
+
+		//execute a handler
 		onResponse();
 	}
 }
 
 xhr.open('GET', url, true);
 xhr.send(null);
+
+console.log(navigator.userAgent)
