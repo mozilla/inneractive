@@ -37,8 +37,10 @@ var IMPRESSION_PIXEL = "";
 var CLICK_PIXEL = "";
 var FAILOVER = "";
 var TEMPLATE = "inneractiveBanner";
-  
-var url = "http://ad-tag.inner-active.mobi/simpleM2M/clientRequestEnhancedHtmlAd?v=" +
+ 
+//Use code from JavaScript Ad Tag 
+//(https://inneractive.jira.com/wiki/display/DevWiki/JavaScript+Ad+Tag)
+var url = "<script language='javascript' src='http://ad-tag.inner-active.mobi/simpleM2M/RequestTagAd?v=" +
 ((IS_ORMMA_SUPPORT) ? ((IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=116" : "Stag-2.1.0&f=52") : ((IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=84" : "Stag-2.0.1&f=20")) +
 ((IS_INTERSTITIAL_AD) ? "&fs=true" : "&fs=false") +
 "&aid=" + encodeURIComponent(APP_ID) +
@@ -73,23 +75,13 @@ var url = "http://ad-tag.inner-active.mobi/simpleM2M/clientRequestEnhancedHtmlAd
 "&rw=" + encodeURIComponent(REQUIRED_WIDTH) +
 "&rh=" + encodeURIComponent(REQUIRED_HEIGHT);
 
-console.log(url)
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-	//complete
-	if (xhr.readyState === 4) {
-		//NOTE: remove all <script> tags!
-		var strippedHTML = xhr.responseText.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+url += "'><\/script>";
 
-		//this should just be pure HTML containing the ad
-		document.getElementById(TEMPLATE).innerHTML = strippedHTML;
+//use the base tag to open all links in a new window (escape the IFrame)
+var pre_html = "<base target=\"_blank\" \/>";
 
-		//execute a handler
-		onResponse();
-	}
-}
+var frame = document.getElementById('frame');
+frame.style.border = "0";
 
-xhr.open('GET', url, true);
-xhr.send(null);
-
-console.log(navigator.userAgent)
+//set the source of the iframe to the generated code to avoid CSP issues
+frame.src = "data:text/html;charset=utf-8," + pre_html + url;
