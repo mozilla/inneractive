@@ -48,7 +48,14 @@ function Ad (opts) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
 	}
 
+    if (opts.FS) {
+        //fullscreen
+        this.setSize(320, 480);
+    }
+
 	this._el.src = "data:text/html;charset=utf-8," + html.join("\n");
+    this._el.style.overflow = "hidden";
+    this._el.setAttribute("scrolling", "no");
 }
 
 Ad.prototype = {

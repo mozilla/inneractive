@@ -1,7 +1,12 @@
+/********
+This file is a demo of how to use the Inneractive library.
+You will want to replace most of these values for 
+your implementation.
+*******/
 var adOptions = {
 	APP_ID: "Mozilla_AppTest_other",
 	PORTAL: 642,
-	IS_MOBILE_WEB: false,
+	IS_MOBILE_WEB: true,
 	IS_ORMMA_SUPPORT: false,
 	IS_MRAID_SUPPORT: false,
 	IS_INTERSTITIAL_AD: false,
@@ -17,7 +22,6 @@ var adOptions = {
 	ANDROID_ID_SHA1: "",
 	IDFA: "",
 	IDFV: "",
-	CLIENT_ID: "-1",
 	CATEGORY: "Music",
 	AGE: "",
 	GENDER: "",
@@ -36,12 +40,11 @@ var adOptions = {
 	IMPRESSION_PIXEL: "",
 	CLICK_PIXEL: "",
 	FAILOVER: "",
-	TEMPLATE: "inneractiveBanner"
 };
 
 //create the Ad object based on the above options
 var ad = Inneractive.createAd(adOptions);
 ad
 	.placement("bottom", "center")
-	.setSize(300, 50)
+	.setSize(300, 53)
 	.addTo(document.getElementById("ad-frame"));
