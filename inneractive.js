@@ -2,6 +2,11 @@ function Ad (opts) {
 	this._el = document.createElement("iframe");
 	this._el.style.border = "0";
 
+	if (!opts.DEVICE_WIDTH && !opts.DEVICE_HEIGHT) {
+		opts.DEVICE_WIDTH = window.innerWidth;
+		opts.DEVICE_HEIGHT = window.innerHeight;
+	}
+
 	var url = "<script language='javascript' src='http://ad-tag.inner-active.mobi/simpleM2M/RequestTagAd?v=" +
 		((opts.IS_ORMMA_SUPPORT) ? ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=116" : "Stag-2.1.0&f=52") : ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=84" : "Stag-2.0.1&f=20")) +
 		((opts.IS_INTERSTITIAL_AD) ? "&fs=true" : "&fs=false") +
@@ -40,9 +45,18 @@ function Ad (opts) {
 	url += "'><\/script>";
 
 	var html = [
+		"<html><head>",
 		"<base target='_blank' />",
-		url
+		"</head><body>",
+		url,
+		"</body></html>"
 	];
+
+	//dont include metatag if value is -1
+	var refreshRate = opts.REFRESH_RATE || 30;
+	if (refreshRate !== -1) {
+		html.splice(1, 0, "<meta http-equiv='refresh' content='" + refreshRate + "'/>");
+	}
 
 	if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);

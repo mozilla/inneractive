@@ -35,16 +35,16 @@ var adOptions = {
 	NETWORK: "", //values are 3G and WIF,
 	OPTIONAL_WIDTH: "", //optional ad widt,
 	OPTIONAL_HEIGHT: "", //optional ad heigh,
-	REQUIRED_WIDTH: "", //required ad widt,
-	REQUIRED_HEIGHT: "", //required ad heigh,
+	REQUIRED_WIDTH: 300, //required ad widt,
+	REQUIRED_HEIGHT: 50, //required ad heigh,
 	IMPRESSION_PIXEL: "",
 	CLICK_PIXEL: "",
 	FAILOVER: "",
+	REFRESH_RATE: 5
 };
 
 //create the Ad object based on the above options
 var ad = Inneractive.createAd(adOptions);
 ad
 	.placement("bottom", "center")
-	.setSize(300, 53)
 	.addTo(document.getElementById("ad-frame"));
