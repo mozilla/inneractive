@@ -47,7 +47,7 @@ function Ad (opts) {
 	var html = [
 		"<html><head>",
 		"<base target='_blank' />",
-		"</head><body style='padding:0;margin:0' onclick='location.reload();'>",
+		"</head><body style='padding:0;margin:0;overflow:hidden' onclick='location.reload();'>",
 		url,
 		"</body></html>"
 	];

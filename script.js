@@ -40,7 +40,7 @@ var adOptions = {
 	IMPRESSION_PIXEL: "",
 	CLICK_PIXEL: "",
 	FAILOVER: "",
-	REFRESH_RATE: 5
+	REFRESH_RATE: -1
 };
 
 //create the Ad object based on the above options

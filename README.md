@@ -17,6 +17,11 @@ var ad = Inneractive.createAd({
 });
 ~~~
 
+#### Special Options
+
+- **`REFRESH_RATE`:** Time in seconds between rotating the ads.
+- **`FS`:** If `true`, make the ad fullscreen.
+
 #### .setSize(width, height)
 Set the size of the ad container.
 
