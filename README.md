@@ -44,3 +44,13 @@ Append the ad to a DOM node in the tree. This is required for your ad to be visi
 ~~~javascript
 ad.addTo(document.body);
 ~~~
+
+#### Fullscreen
+To create a fullscreen ad, include the following options:
+
+~~~javascript
+var ad = Inneractive.createAd({
+    IS_INTERSTITIAL_AD: true,
+    FS: true
+});
+~~~
