@@ -1,6 +1,47 @@
+var defaults = {
+	PORTAL: 8471,
+	IS_ORMMA_SUPPORT: false,
+	IS_MRAID_SUPPORT: false,
+	CATEGORY: "",
+	KEYWORDS: "",
+	GPS_COORDINATES: "",
+	LOCATION: "",
+	IS_MOBILE_WEB: true,
+	IMEI_MD5: "",
+	IMEI_SHA1: "",
+	MAC_MD5: "",
+	MAC_SHA1: "",
+	UDID_MD5: "",
+	UDID_SHA1: "",
+	IMSI_MD5: "",
+	IMSI_SHA1: "",
+	ANDROID_ID_MD5: "",
+	ANDROID_ID_SHA1: "",
+	IDFA: "",
+	IDFV: "",
+	AGE: "",
+	GENDER: "",
+	DEVICE_WIDTH: "",
+	DEVICE_HEIGHT: "",
+	MOBILE_NETWORK_CODE: "",
+	MOBILE_COUNTRY_CODE: "",
+	NETWORK: "",
+	OPTIONAL_WIDTH: "",
+	OPTIONAL_HEIGHT: "",
+	REQUIRED_WIDTH: "",
+	REQUIRED_HEIGHT: ""
+};
+
 function Ad (opts) {
 	this._el = document.createElement("iframe");
 	this._el.style.border = "0";
+
+	// add some defaults if not specified in options
+	for (var key in defaults) {
+		if (opts[key] === undefined) {
+			opts[key] = defaults[key];
+		}
+	}
 
 	if (!opts.DEVICE_WIDTH && !opts.DEVICE_HEIGHT) {
 		opts.DEVICE_WIDTH = window.innerWidth;
