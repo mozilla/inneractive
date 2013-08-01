@@ -34,8 +34,8 @@ var defaults = {
 
 function Ad (opts) {
 	this._el = document.createDocumentFragment();
-    var frame = document.createElement("iframe");
-	frame.style.border = "0";
+    this.frame = document.createElement("iframe");
+	this.frame.style.border = "0";
 
 	// add some defaults if not specified in options
 	for (var key in defaults) {
@@ -109,21 +109,26 @@ function Ad (opts) {
         this.setSize(320, 480);
         var closeBtn = document.createElement("a");
         closeBtn.textContent = "close";
-        closeBtn.style.cssText = "position: absolute; right: 0; top: 0; z-index: 1000";
+        closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white";
+        closeBtn.onclick = function () {
+            this.frame.parentNode.removeChild(this.frame);
+            closeBtn.parentNode.removeChild(closeBtn);
+        }.bind(this);
         this._el.appendChild(closeBtn);
+        this.closeBtn = closeBtn;
     }
 
-	frame.src = "data:text/html;charset=utf-8," + html.join("\n");
-    frame.style.overflow = "hidden";
-    frame.setAttribute("scrolling", "no");
+	this.frame.src = "data:text/html;charset=utf-8," + html.join("\n");
+    this.frame.style.overflow = "hidden";
+    this.frame.setAttribute("scrolling", "no");
 
-    this._el.appendChild(frame);
+    this._el.appendChild(this.frame);
 }
 
 Ad.prototype = {
 	setSize: function (width, height) {
-		this._el.width = width;
-		this._el.height = height;
+		this.frame.width = width;
+		this.frame.height = height;
 
 		if (this.placeVertical || this.placeHorizontal) {
 			//re calculate the placement on size change
@@ -137,7 +142,7 @@ Ad.prototype = {
 	},
 
 	placement: function (vertical, horizontal) {
-		this._el.style.position = "fixed";
+		this.frame.style.position = "fixed";
 
 		if (vertical) { this.placeVertical = vertical; }
 		if (horizontal) { this.placeHorizontal = horizontal; }
@@ -145,24 +150,24 @@ Ad.prototype = {
 		//position the vertical position
 		switch (vertical) {
 			case "bottom":
-				this._el.style.bottom = "0px";
+				this.frame.style.bottom = "0px";
 				break;
 			case "top":
-				this._el.style.top = "0px";
+				this.frame.style.top = "0px";
 				break;
 		}
 
 		switch (horizontal) {
 			case "left":
-				this._el.style.left = "0px";
+				this.frame.style.left = "0px";
 				break;
 			case "right":
-				this._el.style.left = "0px";
+				this.frame.style.left = "0px";
 				break;
 			case "center":
 			case "centre":
 				var pos = (window.innerWidth - this._el.width) / 2;
-				this._el.style.left = Math.floor(pos) + "px";
+				this.frame.style.left = Math.floor(pos) + "px";
 				break;
 		}
 
