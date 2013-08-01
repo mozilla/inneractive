@@ -33,8 +33,9 @@ var defaults = {
 };
 
 function Ad (opts) {
-	this._el = document.createElement("iframe");
-	this._el.style.border = "0";
+	this._el = document.createDocumentFragment();
+    var frame = document.createElement("iframe");
+	frame.style.border = "0";
 
 	// add some defaults if not specified in options
 	for (var key in defaults) {
@@ -106,11 +107,17 @@ function Ad (opts) {
     if (opts.FS) {
         //fullscreen
         this.setSize(320, 480);
+        var closeBtn = document.createElement("a");
+        closeBtn.textContent = "close";
+        closeBtn.style.cssText = "position: absolute; right: 0; top: 0; z-index: 1000";
+        this._el.appendChild(closeBtn);
     }
 
-	this._el.src = "data:text/html;charset=utf-8," + html.join("\n");
-    this._el.style.overflow = "hidden";
-    this._el.setAttribute("scrolling", "no");
+	frame.src = "data:text/html;charset=utf-8," + html.join("\n");
+    frame.style.overflow = "hidden";
+    frame.setAttribute("scrolling", "no");
+
+    this._el.appendChild(frame);
 }
 
 Ad.prototype = {
