@@ -106,10 +106,13 @@ function Ad (opts) {
 
     if (opts.FS) {
         //fullscreen
-        this.setSize(320, 480);
+        if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
+            this.setSize(320, 480);
+        }
+
         var closeBtn = document.createElement("a");
         closeBtn.textContent = "close";
-        closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white";
+        closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
         closeBtn.onclick = function () {
             this.frame.parentNode.removeChild(this.frame);
             closeBtn.parentNode.removeChild(closeBtn);
