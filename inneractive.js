@@ -29,7 +29,8 @@ var defaults = {
 	OPTIONAL_WIDTH: "",
 	OPTIONAL_HEIGHT: "",
 	REQUIRED_WIDTH: "",
-	REQUIRED_HEIGHT: ""
+	REQUIRED_HEIGHT: "",
+    BG_COLOR: "black"
 };
 
 function Ad (opts) {
@@ -123,6 +124,7 @@ function Ad (opts) {
 
 	this.frame.src = "data:text/html;charset=utf-8," + html.join("\n");
     this.frame.style.overflow = "hidden";
+    this.frame.style.background = opts.BG_COLOR;
     this.frame.setAttribute("scrolling", "no");
 
     this._el.appendChild(this.frame);
