@@ -13,7 +13,7 @@ This method will create a new Ad instance based on the provided options. Options
 ~~~javascript
 var ad = Inneractive.createAd({
 	APP_ID: "myAppId",
-	PORTAL: 642
+	PORTAL: 8471
 });
 ~~~
 
