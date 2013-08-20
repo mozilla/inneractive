@@ -4,23 +4,23 @@ This library used the Inneractive ad network to create an ad and place it in a w
 
 ### Usage
 
-See the docs on the [Dev Wiki](https://inneractive.jira.com/wiki/display/DevWiki/JavaScript+Ad+Tag) for the available options on your ad.
-
 #### Inneractive.createAd(options)
 
-This method will create a new Ad instance based on the provided options. Options are specified in an object and use the keys defined in the [JavaScript Ad Tag](https://inneractive.jira.com/wiki/display/DevWiki/JavaScript+Ad+Tag) example.
+This method will create a new Ad instance based on the provided options. 
 
 ~~~javascript
 var ad = Inneractive.createAd({
-	APP_ID: "myAppId",
-	PORTAL: 8471
+	APP_ID: "myAppId"
 });
 ~~~
 
-#### Special Options
+#### Options
 
+- `APP_ID`: The App ID, when you create an Inneractive account.
 - `REFRESH_RATE`: Time in seconds between rotating the ads.
 - `FS`: If `true`, make the ad fullscreen.
+- `IS_INTERSTITIAL_AD`: If `true`, will be a full screen interstitial ad with a Close button.
+- `CLOSE_STYLE`: CSS text for custom styling of the close button.
 
 #### .setSize(width, height)
 Set the size of the ad container.
