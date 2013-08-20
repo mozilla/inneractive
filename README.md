@@ -16,10 +16,10 @@ var ad = Inneractive.createAd({
 
 #### Options
 
-- `APP_ID`: The App ID, when you create an Inneractive account.
+- `APP_ID`: Application ID generated through the inneractive console.
 - `REFRESH_RATE`: Time in seconds between rotating the ads.
 - `FS`: If `true`, make the ad fullscreen.
-- `IS_INTERSTITIAL_AD`: If `true`, will be a full screen interstitial ad with a Close button.
+- `IS_INTERSTITIAL_AD`: To allow interstitial (full screen) ads, set to true. Will show a Close button in the top right corner.
 - `CLOSE_STYLE`: CSS text for custom styling of the close button.
 
 #### .setSize(width, height)
