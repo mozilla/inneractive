@@ -87,22 +87,35 @@ function Ad (opts) {
 
 	url += "'><\/script>";
 
+	var refreshRate = opts.REFRESH_RATE || 30;
+	if (refreshRate < 15) refreshRate = 15;
+
 	var html = [
 		"<html><head>",
+		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center'>",
 		url,
 		"</body></html>"
 	];
 
-	//dont include metatag if value is -1
-	var refreshRate = opts.REFRESH_RATE || 30;
-	if (refreshRate !== -1) {
-		html.splice(1, 0, "<meta http-equiv='refresh' content='" + refreshRate + "'/>");
-	}
-
 	if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
+	}
+
+	if (opts.TYPE === "Interstitial") {
+		// if portrait
+		if (opts.DEVICE_WIDTH < opts.DEVICE_HEIGHT) {
+			opts.FS = true;
+			opts.IS_INTERSTITIAL_AD = true;
+		} else {
+			// if landscape
+			opts.REQUIRED_WIDTH = 300;
+			opts.REQUIRED_HEIGHT = 250;	
+		}
+	} else if (opts.TYPE === "Rectangle") {
+		opts.REQUIRED_WIDTH = 300;
+		opts.REQUIRED_HEIGHT = 250;
 	}
 
     if (opts.FS) {
@@ -160,6 +173,11 @@ Ad.prototype = {
 			case "top":
 				this.frame.style.top = "0px";
 				break;
+			case "center":
+			case "centre":
+				var pos = (window.innerHeight - this._el.height) / 2;
+				this.frame.style.top = Math.floor(pos) + "px";
+				break;
 		}
 
 		switch (horizontal) {
@@ -167,7 +185,7 @@ Ad.prototype = {
 				this.frame.style.left = "0px";
 				break;
 			case "right":
-				this.frame.style.left = "0px";
+				this.frame.style.right = "0px";
 				break;
 			case "center":
 			case "centre":
