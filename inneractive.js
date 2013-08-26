@@ -50,6 +50,22 @@ function Ad (opts) {
 		opts.DEVICE_HEIGHT = window.innerHeight;
 	}
 
+	if (opts.TYPE === "Interstitial") {
+		// if portrait
+		if (opts.DEVICE_WIDTH < opts.DEVICE_HEIGHT) {
+			opts.IS_INTERSTITIAL_AD = true;
+		} else {
+			// if landscape
+			opts.REQUIRED_WIDTH = 300;
+			opts.REQUIRED_HEIGHT = 250;	
+		}
+
+		opts.FS = true;
+	} else if (opts.TYPE === "Rectangle") {
+		opts.REQUIRED_WIDTH = 300;
+		opts.REQUIRED_HEIGHT = 250;
+	}
+
 	var url = "<script language='javascript' src='http://ad-tag.inner-active.mobi/simpleM2M/RequestTagAd?v=" +
 		((opts.IS_ORMMA_SUPPORT) ? ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=116" : "Stag-2.1.0&f=52") : ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=84" : "Stag-2.0.1&f=20")) +
 		((opts.IS_INTERSTITIAL_AD) ? "&fs=true" : "&fs=false") +
@@ -101,21 +117,6 @@ function Ad (opts) {
 
 	if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
-	}
-
-	if (opts.TYPE === "Interstitial") {
-		// if portrait
-		if (opts.DEVICE_WIDTH < opts.DEVICE_HEIGHT) {
-			opts.FS = true;
-			opts.IS_INTERSTITIAL_AD = true;
-		} else {
-			// if landscape
-			opts.REQUIRED_WIDTH = 300;
-			opts.REQUIRED_HEIGHT = 250;	
-		}
-	} else if (opts.TYPE === "Rectangle") {
-		opts.REQUIRED_WIDTH = 300;
-		opts.REQUIRED_HEIGHT = 250;
 	}
 
     if (opts.FS) {
@@ -175,7 +176,7 @@ Ad.prototype = {
 				break;
 			case "center":
 			case "centre":
-				var pos = (window.innerHeight - this._el.height) / 2;
+				var pos = (window.innerHeight - this.frame.height) / 2;
 				this.frame.style.top = Math.floor(pos) + "px";
 				break;
 		}
@@ -189,7 +190,7 @@ Ad.prototype = {
 				break;
 			case "center":
 			case "centre":
-				var pos = (window.innerWidth - this._el.width) / 2;
+				var pos = (window.innerWidth - this.frame.width) / 2;
 				this.frame.style.left = Math.floor(pos) + "px";
 				break;
 		}
@@ -204,6 +205,13 @@ Ad.prototype = {
 
 		parent.appendChild(this._el);
 		return this;
+	},
+
+	refresh: function () {
+		this.placement(
+			this.placeVertical, 
+			this.placeHorizontal
+		);
 	}
 };
 
