@@ -110,8 +110,11 @@ function Ad (opts) {
 		"<html><head>",
 		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
-		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center'>",
+		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
+		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
 		url,
+		"</td></tr></table>",
+		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);</script>",
 		"</body></html>"
 	];
 
@@ -140,6 +143,14 @@ function Ad (opts) {
     this.frame.style.overflow = "hidden";
     this.frame.style.background = opts.BG_COLOR;
     this.frame.setAttribute("scrolling", "no");
+
+    window.addEventListener("message", function (e) {
+    	// clicked the ad, remove it
+    	if (opts.FS && e.data === "click") {
+    		this.frame.parentNode.removeChild(this.frame);
+            closeBtn.parentNode.removeChild(closeBtn);
+    	}
+    }.bind(this), false);
 
     this._el.appendChild(this.frame);
 }
