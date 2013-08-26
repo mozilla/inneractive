@@ -20,7 +20,7 @@ var ad = Inneractive.createAd({
 
 - `APP_ID`: Application ID generated through the inneractive console.
 - `REFRESH_RATE`: Time in seconds between rotating the ads. Should not be smaller than 15.
-- `CLOSE_STYLE`: CSS text for custom styling of the close button.
+- `TYPE`: The type of the ad. Can be Banner, Rectangle, or full screen. 
 
 #### .placement(vertical, horizontal)
 Place the ad at a fixed position on the webpage. Possible options for vertical are: `top`, `bottom` and `center`. Possible options for horizontal are `left`, `right` and `center`.
