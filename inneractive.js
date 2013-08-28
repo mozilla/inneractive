@@ -71,7 +71,7 @@ function Ad (opts) {
 
 	var html = [
 		"<html><head>",
-		//"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
+		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
 		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
