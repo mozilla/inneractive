@@ -30,12 +30,12 @@ var defaults = {
 	OPTIONAL_HEIGHT: "",
 	REQUIRED_WIDTH: "",
 	REQUIRED_HEIGHT: "",
-    BG_COLOR: "black"
+	BG_COLOR: "black"
 };
 
 function Ad (opts) {
 	this._el = document.createDocumentFragment();
-    this.frame = document.createElement("iframe");
+	this.frame = document.createElement("iframe");
 	this.frame.style.border = "0";
 
 	// add some defaults if not specified in options
@@ -89,24 +89,24 @@ function Ad (opts) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
 	}
 
-    if (opts.FS) {
-        //fullscreen
-        if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
-            this.setSize(320, 480);
-        }
+	if (opts.FS) {
+		//fullscreen
+		if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
+			this.setSize(320, 480);
+		}
 
-        var closeBtn = document.createElement("a");
-        closeBtn.textContent = "close";
-        closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
-        closeBtn.onclick = function () {
-            this.frame.parentNode.removeChild(this.frame);
-            closeBtn.parentNode.removeChild(closeBtn);
-        }.bind(this);
-        this._el.appendChild(closeBtn);
-        this.closeBtn = closeBtn;
-    }
+		var closeBtn = document.createElement("a");
+		closeBtn.textContent = "close";
+		closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
+		closeBtn.onclick = function () {
+			this.frame.parentNode.removeChild(this.frame);
+			closeBtn.parentNode.removeChild(closeBtn);
+		}.bind(this);
+		this._el.appendChild(closeBtn);
+		this.closeBtn = closeBtn;
+	}
 
-    // set to a blank page
+	// set to a blank page
 	this.frame.src = "about:blank";
 	
 	// when the document is loaded, replace it with the ad
@@ -115,19 +115,19 @@ function Ad (opts) {
 		inner.write(html.join(""));
 	}.bind(this);
 	
-    this.frame.style.overflow = "hidden";
-    this.frame.style.background = opts.BG_COLOR;
-    this.frame.setAttribute("scrolling", "no");
+	this.frame.style.overflow = "hidden";
+	this.frame.style.background = opts.BG_COLOR;
+	this.frame.setAttribute("scrolling", "no");
 
-    window.addEventListener("message", function (e) {
-    	// clicked the ad, remove it
-    	if (opts.FS && e.data === "click") {
-    		this.frame.parentNode.removeChild(this.frame);
-            closeBtn.parentNode.removeChild(closeBtn);
-    	}
-    }.bind(this), false);
+	window.addEventListener("message", function (e) {
+		// clicked the ad, remove it
+		if (opts.FS && e.data === "click") {
+			this.frame.parentNode.removeChild(this.frame);
+			closeBtn.parentNode.removeChild(closeBtn);
+		}
+	}.bind(this), false);
 
-    this._el.appendChild(this.frame);
+	this._el.appendChild(this.frame);
 }
 
 Ad.prototype = {
