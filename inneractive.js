@@ -73,6 +73,7 @@ function Ad (opts) {
 		"<html><head>",
 		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
+		"<style>#ad { margin: auto }</style>",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
 		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
 		"<input id='iaAdtruthCollectorInput' type='hidden' value='' />",
@@ -91,9 +92,7 @@ function Ad (opts) {
 
 	if (opts.FS) {
 		//fullscreen
-		if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
-			this.setSize(320, 480);
-		}
+		this.setSize(opts.DEVICE_WIDTH, opts.DEVICE_HEIGHT);
 
 		var closeBtn = document.createElement("a");
 		closeBtn.textContent = "close";
