@@ -30,12 +30,12 @@ var defaults = {
 	OPTIONAL_HEIGHT: "",
 	REQUIRED_WIDTH: "",
 	REQUIRED_HEIGHT: "",
-	BG_COLOR: "black"
+    BG_COLOR: "black"
 };
 
 function Ad (opts) {
 	this._el = document.createDocumentFragment();
-	this.frame = document.createElement("iframe");
+    this.frame = document.createElement("iframe");
 	this.frame.style.border = "0";
 
 	// add some defaults if not specified in options
@@ -66,53 +66,20 @@ function Ad (opts) {
 		opts.REQUIRED_HEIGHT = 250;
 	}
 
-	var url = "<script language='javascript' src='http://ad-tag.inner-active.mobi/simpleM2M/RequestTagAd?v=" +
-		((opts.IS_ORMMA_SUPPORT) ? ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=116" : "Stag-2.1.0&f=52") : ((opts.IS_MRAID_SUPPORT) ? "Stag-2.1.0&f=84" : "Stag-2.0.1&f=20")) +
-		((opts.IS_INTERSTITIAL_AD) ? "&fs=true" : "&fs=false") +
-		"&aid=" + encodeURIComponent(opts.APP_ID) +
-		"&po=" + opts.PORTAL +
-		"&c=" + encodeURIComponent(opts.CATEGORY) +
-		"&k=" + encodeURIComponent(opts.KEYWORDS) +
-		((opts.FAILOVER) ? "&noadstring=" + encodeURIComponent(opts.FAILOVER) : "&test=true") +
-		"&lg=" + encodeURIComponent(opts.GPS_COORDINATES) +
-		"&l=" + encodeURIComponent(opts.LOCATION) +
-		"&mw=" + ((opts.IS_MOBILE_WEB) ? "true" : "false") +
-		"&iemd=" + encodeURIComponent(opts.IMEI_MD5) +
-		"&iesha=" + encodeURIComponent(opts.IMEI_SHA1) +
-		"&mmd=" + encodeURIComponent(opts.MAC_MD5) +
-		"&msha=" + encodeURIComponent(opts.MAC_SHA1) +
-		"&dmd=" + encodeURIComponent(opts.UDID_MD5) +
-		"&dsha=" + encodeURIComponent(opts.UDID_SHA1) +
-		"&ismd=" + encodeURIComponent(opts.IMSI_MD5) +
-		"&issha=" + encodeURIComponent(opts.IMSI_SHA1) +
-		"&amd=" + encodeURIComponent(opts.ANDROID_ID_MD5) +
-		"&asha=" + encodeURIComponent(opts.ANDROID_ID_SHA1) +
-		"&idfa=" + encodeURIComponent(opts.IDFA) +
-		"&idfv=" + encodeURIComponent(opts.IDFV) +
-		"&a=" + encodeURIComponent(opts.AGE) +
-		"&g=" + encodeURIComponent(opts.GENDER) +
-		"&w=" + encodeURIComponent(opts.DEVICE_WIDTH) +
-		"&h=" + encodeURIComponent(opts.DEVICE_HEIGHT) +
-		"&mnc=" + encodeURIComponent(opts.MOBILE_NETWORK_CODE) +
-		"&mcc=" + encodeURIComponent(opts.MOBILE_COUNTRY_CODE) +
-		"&nt=" + encodeURIComponent(opts.NETWORK) +
-		"&ow=" + encodeURIComponent(opts.OPTIONAL_WIDTH) +
-		"&oh=" + encodeURIComponent(opts.OPTIONAL_HEIGHT) +
-		"&rw=" + encodeURIComponent(opts.REQUIRED_WIDTH) +
-		"&rh=" + encodeURIComponent(opts.REQUIRED_HEIGHT);
-
-	url += "'><\/script>";
-
 	var refreshRate = opts.REFRESH_RATE || 30;
 	if (refreshRate < 15) refreshRate = 15;
 
 	var html = [
 		"<html><head>",
-		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
+		//"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
 		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
-		url,
+		"<input id='iaAdtruthCollectorInput' type='hidden' value='' />",
+		"<script src='http://cdn2.inner-active.mobi/wv-js/adtruth.js'></script>",
+		"<div id='iaAdPlaceholder'></div>",
+		"<script>ia = {}; ia.adSettings = " + JSON.stringify(opts) + ";</script>",
+		"<script src='http://cdn2.inner-active.mobi/wv-js/iaAdTagInternal.min.js' type='text/javascript'></script>",
 		"</td></tr></table>",
 		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);</script>",
 		"</body></html>"
@@ -122,37 +89,45 @@ function Ad (opts) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
 	}
 
-	if (opts.FS) {
-		//fullscreen
-		if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
-			this.setSize(320, 480);
-		}
+    if (opts.FS) {
+        //fullscreen
+        if (!opts.REQUIRED_WIDTH && !opts.REQUIRED_HEIGHT) {
+            this.setSize(320, 480);
+        }
 
-		var closeBtn = document.createElement("a");
-		closeBtn.textContent = "close";
-		closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
-		closeBtn.onclick = function () {
-			this.frame.parentNode.removeChild(this.frame);
-			closeBtn.parentNode.removeChild(closeBtn);
-		}.bind(this);
-		this._el.appendChild(closeBtn);
-		this.closeBtn = closeBtn;
-	}
+        var closeBtn = document.createElement("a");
+        closeBtn.textContent = "close";
+        closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
+        closeBtn.onclick = function () {
+            this.frame.parentNode.removeChild(this.frame);
+            closeBtn.parentNode.removeChild(closeBtn);
+        }.bind(this);
+        this._el.appendChild(closeBtn);
+        this.closeBtn = closeBtn;
+    }
 
-	this.frame.src = "data:text/html;charset=utf-8," + html.join("\n");
-	this.frame.style.overflow = "hidden";
-	this.frame.style.background = opts.BG_COLOR;
-	this.frame.setAttribute("scrolling", "no");
+    // set to a blank page
+	this.frame.src = "about:blank";
+	
+	// when the document is loaded, replace it with the ad
+	this.frame.onload = function () {
+		var inner = this.frame.contentDocument || this.frame.contentWindow;
+		inner.write(html.join(""));
+	}.bind(this);
+	
+    this.frame.style.overflow = "hidden";
+    this.frame.style.background = opts.BG_COLOR;
+    this.frame.setAttribute("scrolling", "no");
 
-	window.addEventListener("message", function (e) {
-		// clicked the ad, remove it
-		if (opts.FS && e.data === "click") {
-			this.frame.parentNode.removeChild(this.frame);
-			closeBtn.parentNode.removeChild(closeBtn);
-		}
-	}.bind(this), false);
+    window.addEventListener("message", function (e) {
+    	// clicked the ad, remove it
+    	if (opts.FS && e.data === "click") {
+    		this.frame.parentNode.removeChild(this.frame);
+            closeBtn.parentNode.removeChild(closeBtn);
+    	}
+    }.bind(this), false);
 
-	this._el.appendChild(this.frame);
+    this._el.appendChild(this.frame);
 }
 
 Ad.prototype = {
