@@ -73,7 +73,6 @@ function Ad (opts) {
 		"<html><head>",
 		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
-		"<style>#ad { margin: auto }</style>",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
 		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
 		"<input id='iaAdtruthCollectorInput' type='hidden' value='' />",
@@ -83,11 +82,16 @@ function Ad (opts) {
 		"<script src='http://cdn2.inner-active.mobi/wv-js/iaAdTagInternal.min.js' type='text/javascript'></script>",
 		"</td></tr></table>",
 		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);</script>",
+		"<script>window.onload = function () { document.getElementById('ad').style.margin = 'auto'; };</script>",
 		"</body></html>"
 	];
 
 	if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
 		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
+	} else {
+		if (opts.TYPE === "Banner") {
+			this.setSize(320, 50);
+		}
 	}
 
 	if (opts.FS) {
@@ -106,13 +110,7 @@ function Ad (opts) {
 	}
 
 	// set to a blank page
-	this.frame.src = "about:blank";
-	
-	// when the document is loaded, replace it with the ad
-	this.frame.onload = function () {
-		var inner = this.frame.contentDocument || this.frame.contentWindow;
-		inner.write(html.join(""));
-	}.bind(this);
+	this.frame.src = "data:text/html;charset=utf-8," + html.join(" ");
 	
 	this.frame.style.overflow = "hidden";
 	this.frame.style.background = opts.BG_COLOR;
@@ -127,6 +125,10 @@ function Ad (opts) {
 	}.bind(this), false);
 
 	this._el.appendChild(this.frame);
+
+	if (opts.TYPE === "Banner") {
+		this.placement("top", "center");
+	}
 }
 
 Ad.prototype = {
