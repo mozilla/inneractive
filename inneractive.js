@@ -34,7 +34,7 @@ var defaults = {
 };
 
 function Ad (opts) {
-	this._el = document.createDocumentFragment();
+	this._el = document.createElement("div");
 	this.frame = document.createElement("iframe");
 	this.frame.style.border = "0";
 
@@ -82,7 +82,8 @@ function Ad (opts) {
 		"<script src='http://cdn2.inner-active.mobi/wv-js/iaAdTagInternal.min.js' type='text/javascript'></script>",
 		"</td></tr></table>",
 		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);</script>",
-		"<script>window.onload = function () { document.getElementById('ad').style.margin = 'auto'; };</script>",
+		(opts.TYPE === "Interstitial" ? "<script>window.onload = function () { document.getElementById('ad').style.margin = 'auto'; };</script>" : ""),
+		(opts.TYPE === "Banner" ? "<script>window.onload = function () { var ad = document.getElementById('ad'); ad && parent.postMessage('resize:' + ad.width + ',' + ad.height, '*') };</script>" : ""),
 		"</body></html>"
 	];
 
@@ -102,8 +103,7 @@ function Ad (opts) {
 		closeBtn.textContent = "close";
 		closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
 		closeBtn.onclick = function () {
-			this.frame.parentNode.removeChild(this.frame);
-			closeBtn.parentNode.removeChild(closeBtn);
+			this.hide();
 		}.bind(this);
 		this._el.appendChild(closeBtn);
 		this.closeBtn = closeBtn;
@@ -111,7 +111,7 @@ function Ad (opts) {
 
 	// set to a blank page
 	this.frame.src = "data:text/html;charset=utf-8," + html.join(" ");
-	
+
 	this.frame.style.overflow = "hidden";
 	this.frame.style.background = opts.BG_COLOR;
 	this.frame.setAttribute("scrolling", "no");
@@ -119,8 +119,10 @@ function Ad (opts) {
 	window.addEventListener("message", function (e) {
 		// clicked the ad, remove it
 		if (opts.FS && e.data === "click") {
-			this.frame.parentNode.removeChild(this.frame);
-			closeBtn.parentNode.removeChild(closeBtn);
+			this.hide();
+		} else if (e.data.indexOf('resize:') === 0) {
+			var dims = e.data.substr(7).split(",");
+			this.setSize(+dims[0], +dims[1]);
 		}
 	}.bind(this), false);
 
@@ -152,6 +154,11 @@ Ad.prototype = {
 
 		if (vertical) { this.placeVertical = vertical; }
 		if (horizontal) { this.placeHorizontal = horizontal; }
+
+		this.frame.style.top = 
+			this.frame.style.left =
+			this.frame.style.bottom =
+			this.frame.style.right = "";
 
 		//position the vertical position
 		switch (vertical) {
@@ -199,6 +206,14 @@ Ad.prototype = {
 			this.placeVertical, 
 			this.placeHorizontal
 		);
+	},
+
+	show: function () {
+		this._el.style.display = "block";
+	},
+
+	hide: function () {
+		this._el.style.display = "none";
 	}
 };
 
