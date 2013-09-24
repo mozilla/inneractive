@@ -87,14 +87,6 @@ function Ad (opts) {
 		"</body></html>"
 	];
 
-	if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
-		this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
-	} else {
-		if (opts.TYPE === "Banner") {
-			this.setSize(320, 50);
-		}
-	}
-
 	if (opts.FS) {
 		//fullscreen
 		this.setSize(opts.DEVICE_WIDTH, opts.DEVICE_HEIGHT);
@@ -107,6 +99,14 @@ function Ad (opts) {
 		}.bind(this);
 		this._el.appendChild(closeBtn);
 		this.closeBtn = closeBtn;
+	} else {
+		if (opts.REQUIRED_WIDTH && opts.REQUIRED_HEIGHT) {
+			this.setSize(opts.REQUIRED_WIDTH, opts.REQUIRED_HEIGHT);
+		} else {
+			if (opts.TYPE === "Banner") {
+				this.setSize(320, 50);
+			}
+		}
 	}
 
 	// set to a blank page
