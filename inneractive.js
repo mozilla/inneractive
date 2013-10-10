@@ -81,7 +81,9 @@ function Ad (opts) {
 		"<script>ia = {}; ia.adSettings = " + JSON.stringify(opts) + ";</script>",
 		"<script src='http://cdn2.inner-active.mobi/wv-js/iaAdTagInternal.min.js' type='text/javascript'></script>",
 		"</td></tr></table>",
-		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);</script>",
+		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);",
+		"window.addEventListener('message',function(e){if(e.data=='refresh')location.reload();},false);",
+		"</script>",
 		(opts.TYPE === "Interstitial" ? "<script>window.onload = function () { document.getElementById('ad').style.margin = 'auto'; };</script>" : ""),
 		(opts.TYPE === "Banner" ? "<script>window.onload = function () { var ad = document.getElementById('ad'); ad && parent.postMessage('resize:' + ad.width + ',' + ad.height, '*') };</script>" : ""),
 		"</body></html>"
@@ -208,7 +210,12 @@ Ad.prototype = {
 		);
 	},
 
+	refreshAd: function () {
+		this.frame.contentWindow.postMessage("refresh", "*");
+	},
+
 	show: function () {
+		this.refreshAd();
 		this._el.style.display = "block";
 	},
 
