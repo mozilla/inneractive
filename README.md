@@ -20,7 +20,7 @@ var ad = Inneractive.createAd({
 
 - `APP_ID`: Application ID generated through the inneractive console.
 - `REFRESH_RATE`: Time in seconds between rotating the ads. Should not be smaller than 15.
-- `TYPE`: The type of the ad. Can be Banner, Rectangle, or full screen. 
+- `TYPE`: The type of the ad. Can be Banner, Rectangle, or Interstitial. 
 
 #### .placement(vertical, horizontal)
 Place the ad at a fixed position on the webpage. Possible options for vertical are: `top`, `bottom` and `center`. Possible options for horizontal are `left`, `right` and `center`.
@@ -43,5 +43,8 @@ Show the ad container.
 
 #### .hide()
 Hide the ad container.
+
+#### .remove()
+Removes the ad container from the parent.
 
 **Note: It is recommended to create the ad at the very start of the page and show or hide it when needed.**

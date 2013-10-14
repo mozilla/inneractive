@@ -37,6 +37,7 @@ function Ad (opts) {
 	this._el = document.createElement("div");
 	this.frame = document.createElement("iframe");
 	this.frame.style.border = "0";
+	this.visible = true;
 
 	// add some defaults if not specified in options
 	for (var key in defaults) {
@@ -71,7 +72,6 @@ function Ad (opts) {
 
 	var html = [
 		"<html><head>",
-		"<meta http-equiv='refresh' content='" + refreshRate + "'/>",
 		"<base target='_blank' />",
 		"</head><body style='padding:0;margin:0;overflow:hidden;text-align:center;'>",
 		"<table style='width:100%;height:100%;padding:0;margin:0;border-collapse:collapse'><tr><td style='text-align: center; vertical-align: middle;padding:0'>",
@@ -133,6 +133,13 @@ function Ad (opts) {
 	if (opts.TYPE === "Banner") {
 		this.placement("top", "center");
 	}
+
+	// refresh rate checks if visible
+	this.interval = setInterval(function () {
+		if (this.visible) {
+			this.refreshAd();
+		}
+	}.bind(this), refreshRate * 1000);
 }
 
 Ad.prototype = {
@@ -217,10 +224,16 @@ Ad.prototype = {
 	show: function () {
 		this.refreshAd();
 		this._el.style.display = "block";
+		this.visible = true;
 	},
 
 	hide: function () {
 		this._el.style.display = "none";
+		this.visible = false;
+	},
+
+	remove: function () {
+		this._el.parentNode.removeChild(this._el);
 	}
 };
 
