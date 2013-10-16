@@ -81,7 +81,7 @@ function Ad (opts) {
 		"<script>ia = {}; ia.adSettings = " + JSON.stringify(opts) + ";</script>",
 		"<script src='http://cdn2.inner-active.mobi/wv-js/iaAdTagInternal.min.js' type='text/javascript'></script>",
 		"</td></tr></table>",
-		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); location.reload(); }, 100); }, false);",
+		"<script>document.body.addEventListener('click', function () { setTimeout(function() { parent.postMessage('click', '*'); }, 100); }, false);",
 		"window.addEventListener('message',function(e){if(e.data=='refresh')location.reload();},false);",
 		"</script>",
 		(opts.TYPE === "Interstitial" ? "<script>window.onload = function () { document.getElementById('ad').style.margin = 'auto'; };</script>" : ""),
@@ -97,7 +97,7 @@ function Ad (opts) {
 		closeBtn.textContent = "close";
 		closeBtn.style.cssText = "position: absolute; right: 3px; top: 3px; z-index: 1000; color: white" + (opts.CLOSE_STYLE || "");
 		closeBtn.onclick = function () {
-			this.hide();
+			this.remove();
 		}.bind(this);
 		this._el.appendChild(closeBtn);
 		this.closeBtn = closeBtn;
@@ -112,7 +112,9 @@ function Ad (opts) {
 	}
 
 	// set to a blank page
-	this.frame.src = "data:text/html;charset=utf-8," + html.join(" ");
+	setTimeout(function () {
+		this.frame.src = "data:text/html;charset=utf-8," + html.join(" ");
+	}.bind(this), 0);
 
 	this.frame.style.overflow = "hidden";
 	this.frame.style.background = opts.BG_COLOR;
@@ -120,8 +122,11 @@ function Ad (opts) {
 
 	window.addEventListener("message", function (e) {
 		// clicked the ad, remove it
-		if (opts.FS && e.data === "click") {
-			this.hide();
+		if (e.data === "click") {
+			// remove if interstital
+			if (opts.FS) this.remove();
+			// refresh if banner
+			else this.refreshAd();
 		} else if (e.data.indexOf('resize:') === 0) {
 			var dims = e.data.substr(7).split(",");
 			this.setSize(+dims[0], +dims[1]);
@@ -233,6 +238,10 @@ Ad.prototype = {
 	},
 
 	remove: function () {
+		if (this.interval) {
+			clearInterval(this.interval);
+		}
+
 		this._el.parentNode.removeChild(this._el);
 	}
 };
