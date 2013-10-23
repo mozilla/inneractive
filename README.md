@@ -38,13 +38,6 @@ Append the ad to a DOM node in the tree. This is required for your ad to be visi
 ad.addTo(document.body);
 ~~~
 
-#### .show()
-Show the ad container.
-
-#### .hide()
-Hide the ad container.
-
 #### .remove()
 Removes the ad container from the parent.
 
-**Note: It is recommended to create the ad at the very start of the page and show or hide it when needed.**
