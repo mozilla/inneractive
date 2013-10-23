@@ -145,6 +145,14 @@ function Ad (opts) {
 			this.refreshAd();
 		}
 	}.bind(this), refreshRate * 1000);
+
+	document.addEventListener("blur", function () {
+		this.visible = false;
+	}.bind(this));
+
+	document.addEventListener("focus", function () {
+		this.visible = true;
+	}.bind(this));
 }
 
 Ad.prototype = {
