@@ -38,6 +38,7 @@ function Ad (opts) {
 	this.frame = document.createElement("iframe");
 	this.frame.style.border = "0";
 	this.visible = true;
+	this.needsRefresh = false;
 
 	// add some defaults if not specified in options
 	for (var key in defaults) {
@@ -69,6 +70,7 @@ function Ad (opts) {
 
 	var refreshRate = opts.REFRESH_RATE || 30;
 	if (refreshRate < 15) refreshRate = 15;
+	this.refreshRate = refreshRate;
 
 	var html = [
 		"<html><head>",
@@ -126,7 +128,7 @@ function Ad (opts) {
 			// remove if interstital
 			if (opts.FS) this.remove();
 			// refresh if banner
-			else this.refreshAd();
+			else this.needsRefresh = true;
 		} else if (e.data.indexOf('resize:') === 0) {
 			var dims = e.data.substr(7).split(",");
 			this.setSize(+dims[0], +dims[1]);
@@ -139,23 +141,46 @@ function Ad (opts) {
 		this.placement("top", "center");
 	}
 
-	// refresh rate checks if visible
-	this.interval = setInterval(function () {
-		if (this.visible) {
-			this.refreshAd();
-		}
-	}.bind(this), refreshRate * 1000);
+	this.startTimer();
 
 	document.addEventListener("blur", function () {
 		this.visible = false;
-	}.bind(this));
+		this.stopTimer();
+	}.bind(this), false);
 
 	document.addEventListener("focus", function () {
 		this.visible = true;
-	}.bind(this));
+		this.startTimer();
+		if (this.needsRefresh) { this.refreshAd(); }
+	}.bind(this), false);
+
+	document.addEventListener("mozvisibilitychange", function () {
+		this.visible = !document.mozHidden;
+		if (this.needsRefresh && this.visible) { this.refreshAd(); }
+		if (this.visible) { this.startTimer(); }
+		else { this.stopTimer(); }
+	}.bind(this), false)
 }
 
 Ad.prototype = {
+	startTimer: function () {
+		if (this.interval != null) { return; }
+
+		// refresh rate checks if visible
+		this.interval = setInterval(function () {
+			if (this.visible) {
+				this.refreshAd();
+			}
+		}.bind(this), this.refreshRate * 1000);
+	},
+
+	stopTimer: function () {
+		if (typeof this.interval === "number") {
+			clearInterval(this.interval);
+			this.interval = null;
+		}
+	},
+
 	setSize: function (width, height) {
 		this.frame.width = width;
 		this.frame.height = height;
@@ -232,6 +257,7 @@ Ad.prototype = {
 
 	refreshAd: function () {
 		this.frame.contentWindow.postMessage("refresh", "*");
+		this.needsRefresh = false;
 	},
 
 	show: function () {
